@@ -27,7 +27,7 @@ if timeout 8 curl -sI https://github.com -o /dev/null; then ok "Conectividad OK"
 #    funciona nativo en la sesión SSH. Vía secundaria: portapapeles de Guacamole.
 ok "1/6 · SSH server + herramientas de portapapeles"
 sudo apt-get update -qq 2>/dev/null
-sudo apt-get install -y -qq openssh-server xclip git curl pipx >/dev/null 2>&1
+sudo apt-get install -y -qq openssh-server xclip git curl pipx zsh >/dev/null 2>&1
 sudo systemctl enable --now ssh 2>/dev/null || sudo systemctl start ssh 2>/dev/null
 ok "SSH activo. Desde TU terminal:  ssh attacker@$(ip -4 -o addr -o scope=global 2>/dev/null | awk '{print $2}' | head -1 || echo '<IP_PARROT>')"
 # Portapapeles del iLabs (Guacamole): Ctrl+Alt+Shift abre el menú → pega ahí y sale.
