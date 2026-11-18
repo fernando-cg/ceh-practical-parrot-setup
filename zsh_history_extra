@@ -1,0 +1,19 @@
+# Historial curado y seguro para el Parrot del CEH Practical
+# No contiene credenciales ni comandos de clientes.
+systemctl status ssh
+systemctl start ssh
+ip a
+reboot
+ip -br -4 addr
+ip route
+sudo apt-get update
+sudo apt-get install -y openssh-server git curl pipx
+sudo systemctl enable --now ssh
+pipx ensurepath
+pipx install git+https://github.com/Pennyw0rth/NetExec
+pipx install sherlock-project
+setxkbmap es
+nmap -sn -R <RANGO_DEL_EXAMEN>
+nmap -Pn -sC -sV -p- <IP>
+dig NS <DOMINIO>
+dig axfr <DOMINIO> @<NS>
