@@ -1,18 +1,37 @@
-# CEH Practical — Parrot setup
+# CEH Practical — Parrot setup (sin SSH)
 
-Setup rápido y reproducible para una máquina Parrot de laboratorio CEH:
-
-- SSH para trabajar desde el mismo equipo monitorizado y copiar/pegar
-- Historial zsh curado
-- NetExec (`nxc`)
-- Sherlock
-- Teclado español
-- CO2 para Burp Suite
+Preparación del Parrot de laboratorio:
+- Importa y fusiona el historial curado `zsh_history_extra` en `~/.zsh_history`.
+- Instala NetExec (`nxc`) y Sherlock.
+- Cambia el teclado a español (X11) e intenta persistirlo.
+- Descarga CO2 para cargarlo manualmente en Burp: Extensions → Installed → Add → Java.
 
 ## Uso
 
+Desde el usuario normal de Parrot (`attacker`), sin ejecutar todo como root:
+
 ```bash
-curl -sL https://raw.githubusercontent.com/fernando-cg/ceh-practical-parrot-setup/main/ceh_setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fernando-cg/ceh-practical-parrot-setup/main/ceh_setup.sh -o ceh_setup.sh
+bash ceh_setup.sh
 ```
 
-Solo para Parrot/iLabs de laboratorio autorizados. El repositorio no contiene credenciales, tokens, IPs de clientes ni contenido de ningún examen.
+Después, desde tu terminal Zsh:
+
+```zsh
+fc -R ~/.zsh_history
+```
+
+## Copiar y pegar
+
+Usa el menú de Lab on Demand/Skillable: **Type Text → Type Clipboard Text**.
+Es una función de la consola web para introducir texto de tu PC en la VM; no instala ni garantiza un portapapeles bidireccional.
+
+Esta versión **no instala openssh-server, no arranca ni habilita SSH y no instala el helper `clip`**. Tampoco detiene o desinstala servicios que ya existan en la VM.
+
+El historial conserva comandos SSH suministrados por el usuario como texto: importar el historial no ejecuta esos comandos.
+
+## Límites de verificación
+
+Se comprueba sintaxis Bash y el flujo con comandos externos simulados. Las instalaciones reales requieren repositorios y red disponibles en tu Parrot; no se garantiza una duración fija. Para el examen, comprueba previamente que estén autorizados los scripts y descargas externos.
+
+Solo para entornos autorizados. No publiques secretos ni contenido del examen en este repositorio.

@@ -20,23 +20,17 @@ echo "== CEH Practical — setup del Parrot =="
 
 # 0) Conectividad (5 s) — si no hay red, no instalamos nada a ciegas
 if timeout 8 curl -sI https://github.com -o /dev/null; then ok "Conectividad OK"; else
-  warn "Sin salida a internet (o lenta). Las descargas van a fallar — usa el método manual de pegar comandos por SSH."; fi
+  warn "Sin salida a internet (o lenta). Las descargas van a fallar — usa el método manual de pegar comandos por Type Clipboard Text."; fi
 
-# 1) COMUNICACIÓN CON TU EQUIPO (copiar/pegar)
-#    Vía principal: SSH desde el terminal de TU PC (mismo equipo monitorizado) — pegar
-#    funciona nativo en la sesión SSH. Vía secundaria: portapapeles de Guacamole.
-ok "1/6 · SSH server + herramientas de portapapeles"
+# 1) DEPENDENCIAS. El pegado PC -> VM lo proporciona Lab on Demand/Skillable.
+# Commands -> Type Text -> Type Clipboard Text (no es bidireccional).
+# No instalar ni arrancar servidores de acceso remoto.
+ok "1/6 · Dependencias básicas (versión sin SSH)"
 sudo apt-get update -qq 2>/dev/null
-sudo apt-get install -y -qq openssh-server xclip git curl pipx zsh >/dev/null 2>&1
-sudo systemctl enable --now ssh 2>/dev/null || sudo systemctl start ssh 2>/dev/null
-ok "SSH activo. Desde TU terminal:  ssh attacker@$(ip -4 -o addr -o scope=global 2>/dev/null | awk '{print $2}' | head -1 || echo '<IP_PARROT>')"
-# Portapapeles del iLabs (Guacamole): Ctrl+Alt+Shift abre el menú → pega ahí y sale.
-cat > ~/.local/bin/clip 2>/dev/null || mkdir -p ~/.local/bin && cat > ~/.local/bin/clip <<'EOF'
-#!/bin/bash
-# clip get  -> imprime el portapapeles |  echo texto | clip set -> lo guarda
-if [ "$1" = "get" ]; then xclip -o -selection clipboard 2>/dev/null; else xclip -selection clipboard 2>/dev/null; fi
-EOF
-chmod +x ~/.local/bin/clip
+sudo apt-get install -y -qq git curl pipx zsh >/dev/null 2>&1
+mkdir -p ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+echo "   Pegado: Lab on Demand → Type Text → Type Clipboard Text"
 
 # 2) HISTORIAL DE ZSH (tus comandos del lab, ya disponibles con flecha arriba)
 ok "2/6 · Importando historial zsh"
@@ -87,12 +81,12 @@ else
   warn "Descarga de CO2 falló. Alternativa EN Burp: Extensions → BApp Store → busca 'CO2' → Install"
 fi
 
-# BRIDGE DE TEXTO (eliminado deliberadamente): no subas comandos/enunciados del examen a servicios externos.
-# Usa SSH desde tu mismo equipo monitorizado o el portapapeles de la consola iLabs.
+# No se crean puentes externos de texto ni se cambia el estado de servicios existentes.
 
 echo
 ok "LISTO. Resumen:"
-echo "   ssh attacker@<IP_PARROT>     ← desde tu PC, pega comandos nativo"
-echo "   nxc --version && sherlock --help && dig axfr test.com @1.1.1.1"
+echo "   Pegado PC → Parrot: menú Type Clipboard Text de Lab on Demand"
+echo "   nxc --version; sherlock --help"
+echo "   En tu zsh actual: fc -R ~/.zsh_history"
 echo "   Burp: carga ~/burp-exts/co2.jar"
 ip -4 addr show | grep -oP 'inet \K[\d.]+' | grep -v '127.0.0.1' | while read i; do echo "   IP: $i"; done
