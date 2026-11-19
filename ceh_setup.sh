@@ -32,20 +32,26 @@ mkdir -p ~/.local/bin
 export PATH="$HOME/.local/bin:$PATH"
 echo "   Pegado: Lab on Demand → Type Text → Type Clipboard Text"
 
-# 2) HISTORIAL DE ZSH (tus comandos del lab, ya disponibles con flecha arriba)
-ok "2/7 · Importando historial zsh"
+# 2) HISTORIAL (zsh Y bash: importa a ambos porque la VM puede usar cualquiera)
+ok "2/7 · Importando historial (zsh + bash)"
 mkdir -p ~/.cache/zsh 2>/dev/null
 if timeout 20 curl -fsSL "$HIST_RAW_URL" -o /tmp/hist_import 2>/dev/null && [ -s /tmp/hist_import ]; then
+  # zsh
   touch ~/.zsh_history
-  # deduplicado simple: solo líneas nuevas
   cat ~/.zsh_history /tmp/hist_import | awk '!seen[$0]++' > ~/.zsh_history.new && mv ~/.zsh_history.new ~/.zsh_history
+  # bash (la VM del examen suele abrir bash por defecto)
+  touch ~/.bash_history
+  cat ~/.bash_history /tmp/hist_import | awk '!seen[$0]++' > ~/.bash_history.new && mv ~/.bash_history.new ~/.bash_history
   rm -f /tmp/hist_import
-  ok "Historial importado ($(wc -l < ~/.zsh_history) líneas totales). Abre una zsh nueva y usa ↑"
+  ok "Historial importado: $(wc -l < ~/.zsh_history) líneas zsh / $(wc -l < ~/.bash_history) líneas bash"
+  ok "Recarga en la terminal ACTUAL:  zsh: fc -R ~/.zsh_history   |   bash: history -c; history -r ~/.bash_history"
+  ok "(o simplemente abre una terminal nueva y usa ↑ / Ctrl+R)"
 else
-  warn "No pude bajar el historial (¿URL raw correcta?). Pégalo a mano: cat >> ~/.zsh_history"
+  warn "No pude bajar el historial (¿URL raw correcta?). Pégalo a mano: cat >> ~/.bash_history"
 fi
-# formato extended_history para lo que grabs hoy
+# configuración de historial en ambos shells
 grep -q 'HISTFILE' ~/.zshrc 2>/dev/null || echo 'HISTFILE=~/.zsh_history; HISTSIZE=50000; SAVEHIST=50000; setopt share_history' >> ~/.zshrc
+grep -q 'HISTFILE' ~/.bashrc 2>/dev/null || echo 'HISTFILE=~/.bash_history; HISTSIZE=50000; HISTFILESIZE=50000; shopt -s histappend' >> ~/.bashrc
 
 # 3) NETEXEC
 ok "3/7 · NetExec (nxc)"
