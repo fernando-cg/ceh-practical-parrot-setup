@@ -12,6 +12,8 @@ sudo systemctl enable --now ssh
 pipx ensurepath
 pipx install git+https://github.com/Pennyw0rth/NetExec
 pipx install sherlock-project
+~/.local/bin/kerbrute --help
+kerbrute userenum -d <DOMINIO> usuarios.txt
 setxkbmap es
 nmap -sn -R <RANGO_DEL_EXAMEN>
 nmap -Pn -sC -sV -p- <IP>

@@ -2,7 +2,9 @@
 
 Preparación del Parrot de laboratorio:
 - Importa y fusiona el historial curado `zsh_history_extra` en `~/.zsh_history`.
-- Instala NetExec (`nxc`) y Sherlock.
+- Instala NetExec (`nxc`), Sherlock y Kerbrute.
+- Kerbrute se descarga de [ropnop/kerbrute v1.0.3](https://github.com/ropnop/kerbrute/releases/tag/v1.0.3) en `~/.local/bin/kerbrute`, seleccionando Linux amd64 o 386. Comprueba `--help` antes de instalar y omite la descarga si ya está disponible. En otras arquitecturas avisa y continúa.
+- Comprueba Kerbrute con `~/.local/bin/kerbrute --help`; si tu terminal actual aún no reconoce `kerbrute`, ejecuta `export PATH="$HOME/.local/bin:$PATH"` y, en Zsh, `rehash`.
 - Cambia el teclado a español (X11) e intenta persistirlo.
 - Descarga CO2 para cargarlo manualmente en Burp: Extensions → Installed → Add → Java.
 
